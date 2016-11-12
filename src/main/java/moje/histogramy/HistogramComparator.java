@@ -1,7 +1,6 @@
-package moje.HashMap;
+package moje.histogramy;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -17,7 +16,7 @@ public class HistogramComparator {
     public final static String PATH_TO_RZESZOW_DATABASE = "D:\\MAGISTERKA\\BazyZdjec\\Rzeszow";
     public final static String PATH_FOR_COMPARING_FILES = "D:\\MAGISTERKA\\TESTY";
 
-    public String comparator(File fileToCompare, String pathToBaseForSearching, int numberOfBaskets) throws IOException {
+    public HashMap<String, String> comparator(File fileToCompare, String pathToBaseForSearching, File[] dataBaseDesc, int numberOfBaskets) throws IOException {
 
         LoaderHistograms um = new LoaderHistograms();
 
@@ -28,11 +27,19 @@ public class HistogramComparator {
         HashMap<Integer, Integer> map1 = um.fileToHasMap(fileToCompare);
         //Wczytanie pierwszego obrazka
 
-        File folder = new File(pathToBaseForSearching + "\\Histogramy");
-        File[] listOfFiles = folder.listFiles();
+        HashMap<String, String> wynikPorownania = new HashMap<>();
+
+        File[] listOfFiles;
+
+        if (pathToBaseForSearching != null) {
+            File folder = new File(pathToBaseForSearching + "\\Histogramy");
+            listOfFiles = folder.listFiles();
+        } else {
+            listOfFiles = dataBaseDesc;
+        }
 
         for (File file : listOfFiles) {
-            if (file.isFile()) {
+            if (file != null && file.isFile()) {
 
                 suma = 0;
 
@@ -45,44 +52,21 @@ public class HistogramComparator {
                         else
                             suma += map2.get(z);
                     }
-
                 }
-                // System.out.println("POROWNUJE Z + " + sumaPom + " i = " + ii);
                 if (suma > sumaPom) {
                     sumaPom = suma;
                     typ = file.getName();
                 }
-
             }
         }
-/*
-        if (i < 10) {
-            if (typ.startsWith(i.toString(), 1)) {
-                ilosPopKlas++;
-                zapis.write(i + " " + typ + "\n");
-            } else {
-                zapis.write(i + " " + typ + "\n");
-            }
-        } else {
-            if (typ.startsWith(i.toString())) {
-                zapis.write(i + " " + typ + " n ");
-                ilosPopKlas++;
-            } else {
-                zapis.write(i + " " + typ + "\n");
-            }
-        }*/
-        sumaPom = 0;
-
-
-/*        zapis.close();*/
-
-        return typ;
+        wynikPorownania.put(fileToCompare.getName(), typ);
+        return wynikPorownania;
     }
 
     public static void main(String[] args) throws IOException {
         HistogramComparator histogramComparator = new HistogramComparator();
         File file = new File("D:\\MAGISTERKA\\BazyZdjec\\Rzeszow\\Histogramy\\Histogram_00_01_04.jpg.DESC.txt");
-        System.out.println(histogramComparator.comparator(file,PATH_TO_RZESZOW_DATABASE,200));
+        System.out.println(histogramComparator.comparator(file, PATH_TO_RZESZOW_DATABASE, null, 200).toString());
 
     }
 }

@@ -8,7 +8,6 @@ import java.util.*;
  */
 public class GeneratorHistogramow2NEW {
 
-
     public final static String PATH_TO_RZESZOW_DATABASE = "D:\\MAGISTERKA\\BazyZdjec\\Rzeszow";
 
     public final static String PATH_TO_RZESZOW_DATABASE_DESC = PATH_TO_RZESZOW_DATABASE + "\\desc";
@@ -20,6 +19,12 @@ public class GeneratorHistogramow2NEW {
     public final static String BAZA = "baza";
 
     public final static String BASKETS = "baskets";
+
+    public final static int SUFR = 64;
+
+    public final static int SIFT = 128;
+
+
 
     private HashMap<Integer, Integer> Histogram;
     private ArrayList<String> basePointsList;
@@ -153,6 +158,27 @@ public class GeneratorHistogramow2NEW {
 
         }
         return imgHistogram;
+    }
+
+
+    public void generujHistogramyDlaBazy(String pathToDataBase, int liczbaPktGenerowanychPrzezAlgorytm, int liczbaKoszykow) throws IOException {
+
+        File folder = new File(pathToDataBase + "\\desc");
+        File[] listOfFiles = folder.listFiles();
+
+        for (File fileWithDESC : listOfFiles){
+
+            if (fileWithDESC.isFile()) {
+
+                ArrayList<String> lista = pktToArrayList(fileWithDESC,liczbaPktGenerowanychPrzezAlgorytm);
+                HashMap histogram = histogramGenerator(liczbaKoszykow, lista, liczbaPktGenerowanychPrzezAlgorytm);
+
+                File plik = new File(pathToDataBase + "\\Histogramy\\Histogram_" + fileWithDESC.getName());
+                FileWriter zapis = new FileWriter(plik, true);
+                zapis.write(histogram.toString());
+                zapis.close();
+            }
+        }
     }
 
 }

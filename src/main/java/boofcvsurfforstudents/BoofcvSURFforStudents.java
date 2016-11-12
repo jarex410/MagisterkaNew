@@ -50,10 +50,10 @@ public class BoofcvSURFforStudents {
     private static final String zuBuDuBase = "D:\\MAGISTERKA\\BazyZdjec\\ZuBuD";
     private static final String oxfordBase = "D:\\MAGISTERKA\\BazyZdjec\\oxbuild_images";
 
-    public void generujPktSurf(String pathToFile) throws IOException {
+    public void generujPktSurf(String pathToFolderWithPictures) throws IOException {
         // SURF generuje punkty na obrazie i opisuje każdy z nich za pomocą 64 wartości.
         int liczbaPunktowOktawa = 500;
-        File folder = new File(pathToFile);
+        File folder = new File(pathToFolderWithPictures);
         File[] listOfFiles = folder.listFiles();
 
 
@@ -101,21 +101,16 @@ public class BoofcvSURFforStudents {
                     }
 
                     zapis2.write(punkty.toString());
-
                     bw.close();
                     fw.close();
-
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 zapis2.close();
             }
         }
-
-
     }
 
     public static void generujPunktySurf(String plik, List<ScalePoint> pkty, List<SurfFeature> descry, int liczbaPunktowOktawa) {      //   System.out.println( plik);
@@ -162,13 +157,9 @@ public class BoofcvSURFforStudents {
             // save everything for processing later on
             descriptions.add(desc);
         }
-
         pkty.addAll(points);
         descry.addAll(descriptions);
-
-
     }
-
 
     private static void wyswietlRezultat(BufferedImage image,
                                          List<ScalePoint> points) {
@@ -196,22 +187,15 @@ public class BoofcvSURFforStudents {
         }
 
         ImageFloat32 input = ConvertBufferedImage.convertFromSingle(tmp, null, ImageFloat32.class);
-
-
         DescribePointBrief<ImageFloat32> brief = FactoryDescribePointAlgs.brief(FactoryBriefDefinition.gaussian(new Random(123), 16, 512),
                 FactoryBlurFilter.gaussian(ImageFloat32.class, 0, 4));
-
 
         brief.setImage(input);
         TupleDesc_B f = brief.createFeature();
 
-
         for (ScalePoint moj : mojePunkty) {
-
             brief.process(moj.x, moj.y, f);
-
             List<Integer> deskryptor = new ArrayList<>();
-
             for (int i = 0; i < f.numBits; i++) {
                 if (deskryptor.size() <= 520) {
                     if (f.isBitTrue(i)) {
@@ -220,14 +204,10 @@ public class BoofcvSURFforStudents {
                         deskryptor.add(0);
                 }
             }
-
             wyjscie.add(deskryptor.toString());
-
-
         }
-
         zapis.write(String.valueOf(wyjscie));
-
+        zapis.close();
     }
 
 }

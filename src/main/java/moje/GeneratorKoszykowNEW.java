@@ -21,6 +21,10 @@ public class GeneratorKoszykowNEW {
 
     public final static String PATH_TO_RZESZOW_DATABASE_DESC = PATH_TO_RZESZOW_DATABASE + "\\desc";
 
+    public final static int SUFR = 64;
+
+    public final static int SIFT = 128;
+
 
     /**
      * Metoda generuje koszyki dla odpowiedniej bazy zdjec
@@ -82,7 +86,7 @@ public class GeneratorKoszykowNEW {
 
         GeneratorKoszykowNEW generatorKoszykowNEW = new GeneratorKoszykowNEW();
 
-        generatorKoszykowNEW.generujKoszyki(PATH_TO_RZESZOW_DATABASE, 200, 64);
+        generatorKoszykowNEW.generujKoszyki(PATH_TO_RZESZOW_DATABASE, 200, SUFR);
 
     }
 
